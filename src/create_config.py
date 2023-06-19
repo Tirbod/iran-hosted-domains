@@ -5,7 +5,7 @@ import constants as consts
 import utils
 
 
-def shadowrocket(bypass_domains: Iterable[str], ads_domains: Iterable[str]):
+def shadowrocket():
     config = (
         "#Shadowrocket\n"
         "[General]\n"
@@ -20,20 +20,17 @@ def shadowrocket(bypass_domains: Iterable[str], ads_domains: Iterable[str]):
         "dns-direct-fallback-proxy = true\n"
         "ipv6 = true\n"
         "[Rule]\n"
+        "DOMAIN-SET,https://www.github.com/bootmortis/iran-hosted-domains/releases/latest/download/surge_domainset_ads.txt,REJECT,update-interval=432000\n"
+        "DOMAIN-SUFFIX,ir,DIRECT\n"
+        "DOMAIN-SET,https://www.github.com/bootmortis/iran-hosted-domains/releases/latest/download/surge_domainset_other.txt,DIRECT,update-interval=432000\n"
+        "GEOIP,IR,DIRECT\n"
         "IP-CIDR,192.168.0.0/16,DIRECT\n"
         "IP-CIDR,10.0.0.0/8,DIRECT\n"
         "IP-CIDR,172.16.0.0/12,DIRECT\n"
         "IP-CIDR,127.0.0.0/8,DIRECT\n"
-        "GEOIP,IR,DIRECT\n"
-    )
-    config += "\n".join(f"DOMAIN-SUFFIX,{domain},REJECT" for domain in ads_domains) + "\n"
-    config += "DOMAIN-SUFFIX,ir,DIRECT\n"
-    config += "\n".join(f"DOMAIN-SUFFIX,{domain},DIRECT" for domain in bypass_domains) + "\n"
-    config += (        
-
         "FINAL,PROXY\n"
         "[Host]\n"
-        "localhost = 127.0.0.1\n"
+        "localhost = 127.0.0.1\n"        
     )
     
     utils.save_to_file(consts.shadowrocket_path, config)
